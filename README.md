@@ -113,8 +113,6 @@ src/
 │   │   └── home.page.scss    # Estilos modernos, diseño responsive y paleta de colores
 │   └── services/
 │       └── location.ts       # Servicio que gestiona permisos y llamadas a Geolocation
-docs/
-└── screenshots/              # Directorio destinado para capturas de pantalla de la entrega
 ```
 
 ---
