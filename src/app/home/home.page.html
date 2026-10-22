@@ -16,14 +16,11 @@
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- REQUERIMIENTO 1: Hipervínculo a la posición GPS del sitio                -->
-  <!-- REQUERIMIENTO 3: Botón que guarda la ubicación en un archivo txt          -->
-  <!-- ========================================================================= -->
+
   <ion-card class="feature-card">
     <ion-card-header>
       <div class="card-header-flex">
-        <ion-badge color="primary">Requisitos 1 y 3</ion-badge>
+
         <span class="status-indicator" [class.active]="watchId !== null">
           <ion-icon [name]="watchId !== null ? 'radio-outline' : 'pin-outline'"></ion-icon>
           {{ watchId !== null ? 'GPS en vivo activo' : 'GPS estático' }}
@@ -145,14 +142,9 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- ========================================================================= -->
-  <!-- REQUERIMIENTO 2: Hipervínculo que muestra ruta a casa, parque o sitio      -->
-  <!-- REQUERIMIENTO 4: Botón que guarda la ruta en un archivo txt               -->
-  <!-- ========================================================================= -->
   <ion-card class="feature-card">
     <ion-card-header>
       <div class="card-header-flex">
-        <ion-badge color="secondary">Requisitos 2 y 4</ion-badge>
         <span class="route-badge">Google Maps Directions</span>
       </div>
       <ion-card-title>2. Ruta con Puntos Intermedios</ion-card-title>
@@ -160,7 +152,6 @@
     </ion-card-header>
 
     <ion-card-content>
-      <!-- Selección de Destino -->
       <ion-item class="custom-select-item">
         <ion-label position="stacked">Seleccione Sitio de Interés / Destino:</ion-label>
         <ion-select
@@ -178,7 +169,6 @@
         </ion-select>
       </ion-item>
 
-      <!-- Toggle origen GPS o manual -->
       <div class="origin-toggle-container">
         <label class="toggle-label">
           <input
@@ -190,9 +180,7 @@
         </label>
       </div>
 
-      <!-- Resumen visual de la ruta -->
       <div class="route-steps">
-        <!-- Punto A: Origen -->
         <div class="route-step">
           <div class="step-icon origin">
             <ion-icon name="pin-outline"></ion-icon>
@@ -206,7 +194,6 @@
           </div>
         </div>
 
-        <!-- Waypoints (Puntos de paso) -->
         <div class="route-step" *ngIf="waypointsRuta()">
           <div class="step-icon waypoint">
             <ion-icon name="navigate-outline"></ion-icon>
@@ -217,7 +204,6 @@
           </div>
         </div>
 
-        <!-- Punto B: Destino -->
         <div class="route-step">
           <div class="step-icon destination">
             <ion-icon name="flag-outline"></ion-icon>
@@ -229,7 +215,6 @@
         </div>
       </div>
 
-      <!-- Si seleccionó personalizado, permitir ingresar datos -->
       <div *ngIf="destinoSeleccionado() === 'custom'" class="custom-inputs">
         <ion-item lines="none" class="input-card">
           <ion-label position="stacked">Coordenadas de Origen (lat,lng):</ion-label>

@@ -18,9 +18,10 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  IonBadge,
   ToastController,
 } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { addIcons } from 'ionicons';
 import {
   locationOutline,
@@ -63,7 +64,6 @@ interface DestinoPreset {
     IonCardContent,
     IonButton,
     IonIcon,
-    IonBadge,
     IonItem,
     IonLabel,
     IonInput,
@@ -275,8 +275,7 @@ ${url}
 ========================================================
 `;
 
-    this.descargarArchivo('ubicacion_gps.txt', contenido);
-    await this.mostrarToast('Archivo ubicacion_gps.txt guardado exitosamente', 'success');
+    await this.descargarArchivo('ubicacion_gps.txt', contenido);
   }
 
   // 4.- Guardar ruta en archivo txt
@@ -302,21 +301,54 @@ ${url}
 ========================================================
 `;
 
-    this.descargarArchivo('ruta_gps.txt', contenido);
-    await this.mostrarToast('Archivo ruta_gps.txt guardado exitosamente', 'success');
+    await this.descargarArchivo('ruta_gps.txt', contenido);
   }
 
-  // Descarga el archivo txt compatible con navegador y móviles
-  private descargarArchivo(nombreArchivo: string, contenido: string) {
-    const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = nombreArchivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  // Guarda o descarga el archivo txt compatible con Android nativo y navegador web
+  private async descargarArchivo(nombreArchivo: string, contenido: string) {
+    if (Capacitor.isNativePlatform()) {
+      try {
+        await Filesystem.writeFile({
+          path: nombreArchivo,
+          data: contenido,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+        await this.mostrarToast(`Guardado en Documentos/${nombreArchivo}`, 'success');
+        return;
+      } catch (err: any) {
+        console.warn('Error guardando en Documents, intentando en Data:', err);
+        try {
+          await Filesystem.writeFile({
+            path: nombreArchivo,
+            data: contenido,
+            directory: Directory.Data,
+            encoding: Encoding.UTF8,
+          });
+          await this.mostrarToast(`Guardado en archivos de la app: ${nombreArchivo}`, 'success');
+          return;
+        } catch (innerErr: any) {
+          await this.mostrarToast('Error al guardar archivo: ' + (innerErr?.message || innerErr), 'danger');
+          return;
+        }
+      }
+    }
+
+    // Modo navegador web (PC)
+    try {
+      const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = nombreArchivo;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      await this.mostrarToast(`Archivo ${nombreArchivo} descargado exitosamente`, 'success');
+    } catch (e: any) {
+      await this.mostrarToast('Error al descargar archivo: ' + (e?.message || e), 'danger');
+    }
   }
 
   // Copiar enlaces al portapapeles
