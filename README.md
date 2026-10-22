@@ -1,26 +1,24 @@
 # Proyecto GPS y Rutas con Google Maps 📍🗺️
 
 > **Escuela Politécnica Nacional (EPN)**  
-> **Facultad de Ingeniería de Sistemas**  
+> **ESFOT**
 > **Materia:** Aplicaciones Móviles  
-> **Semestre:** 5to Semestre  
+---
+
+## Integrantes (Trabajo en Parejas)
+- **Integrante 1:** Eduardo Ganchala 
+- **Integrante 2:** Josue Ortiz 
 
 ---
 
-## 👥 Integrantes (Trabajo en Parejas)
-- **Integrante 1:** [Nombre y Apellido] - `correo@epn.edu.ec`
-- **Integrante 2:** [Nombre y Apellido] - `correo@epn.edu.ec`
-
----
-
-## 📋 Descripción del Proyecto
+## Descripción del Proyecto
 Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalone Components** y **Capacitor** permite capturar en tiempo real las coordenadas del dispositivo móvil mediante GPS, generar enlaces dinámicos compatibles con la API de **Google Maps** (tanto para ubicación puntual como para rutas con múltiples puntos de parada/waypoints) y exportar estos reportes a archivos de texto plano (`.txt`).
 
 ---
 
-## 🚀 Requerimientos Implementados
+## Requerimientos Implementados
 
-### 1. Hipervínculo a la posición GPS del sitio 📍
+### 1. Hipervínculo a la posición GPS del sitio 
 - Obtención de las coordenadas actuales del dispositivo (`latitud` y `longitud`) mediante el plugin `@capacitor/geolocation`.
 - Generación dinámica de un hipervínculo clickeable hacia Google Maps:
   ```text
@@ -37,7 +35,7 @@ Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalo
 
 ---
 
-### 2. Hipervínculo que muestra la ruta a casa, parque o sitio de interés 🚗🧭
+### 2. Hipervínculo que muestra la ruta a casa, parque o sitio de interés 
 - Construcción automática de URLs de navegación usando la API de direcciones de Google Maps:
   ```text
   https://www.google.com/maps/dir/?api=1&origin={ORIGEN}&destination={DESTINO}&waypoints={WAYPOINTS}
@@ -57,7 +55,7 @@ Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalo
 
 ---
 
-### 3. Botón para guardar ubicación en un archivo `.txt` 💾
+### 3. Botón para guardar ubicación en un archivo `.txt`
 - Al presionar **"3. Guardar Ubicación en TXT"**, el sistema genera y descarga automáticamente el archivo `ubicacion_gps.txt`.
 - **Estructura del archivo generado:**
   ```text
@@ -75,8 +73,7 @@ Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalo
   ```
 
 ---
-
-### 4. Botón para guardar la ruta en un archivo `.txt` 💾
+### 4. Botón para guardar la ruta en un archivo `.txt` 
 - Al presionar **"4. Guardar Ruta en TXT"**, el sistema genera y descarga automáticamente el archivo `ruta_gps.txt`.
 - **Estructura del archivo generado:**
   ```text
@@ -95,7 +92,7 @@ Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalo
 
 ---
 
-## 🛠️ Tecnologías y Librerías Utilizadas
+## Tecnologías y Librerías Utilizadas
 - **Ionic Framework 9.x:** Componentes de interfaz móvil adaptables.
 - **Angular 22.x (Standalone Components & Signals):** Arquitectura reactiva y modular.
 - **Capacitor 8.x:** Puente nativo para acceder al hardware del dispositivo.
@@ -105,7 +102,7 @@ Esta aplicación móvil desarrollada con **Ionic Framework**, **Angular Standalo
 
 ---
 
-## 📂 Estructura Principal del Código
+## Estructura Principal del Código
 
 ```text
 src/
@@ -122,12 +119,12 @@ docs/
 
 ---
 
-## 💻 Instrucciones de Instalación y Ejecución
+## Instrucciones de Instalación y Ejecución
 
 ### 1. Clonar el repositorio
 ```bash
-git clone <URL_DE_SU_REPOSITORIO_GITHUB>
-cd Gps
+git clone <https://github.com/Eduxrd-o/Gps-Rutas.git>
+cd Gps-Rutas
 ```
 
 ### 2. Instalar dependencias
@@ -153,37 +150,4 @@ npx cap sync android
 
 # Abrir Android Studio
 npx cap open android
-```
-
----
-
-## 📸 Capturas de Pantalla (Evidencia de Funcionamiento)
-
-> *Nota para los estudiantes: Agreguen sus capturas en la carpeta `docs/screenshots/` con los nombres indicados abajo.*
-
-| Requisito | Captura de Pantalla |
-| :--- | :--- |
-| **1. Mi Posición GPS & Hipervínculo** | ![Posición GPS](docs/screenshots/01_posicion_gps.png) |
-| **Google Maps Abierto (Ubicación)** | ![Google Maps Sitio](docs/screenshots/02_google_maps_sitio.png) |
-| **2. Configuración de Ruta con Waypoints** | ![Ruta y Waypoints](docs/screenshots/03_ruta_waypoints.png) |
-| **Google Maps Abierto (Ruta)** | ![Google Maps Ruta](docs/screenshots/04_google_maps_ruta.png) |
-| **3. Archivo `ubicacion_gps.txt`** | ![Reporte Ubicación TXT](docs/screenshots/05_archivo_txt_ubicacion.png) |
-| **4. Archivo `ruta_gps.txt`** | ![Reporte Ruta TXT](docs/screenshots/06_archivo_txt_ruta.png) |
-
----
-
-## 📤 Pasos para Subir el Proyecto a GitHub
-
-```bash
-# Verificar estado de cambios
-git status
-
-# Agregar todos los cambios realizados
-git add .
-
-# Crear el commit del proyecto
-git commit -m "feat: implementacion completa de requerimientos GPS, rutas Google Maps y exportacion TXT"
-
-# Subir a la rama principal (master o main)
-git push origin master
 ```
