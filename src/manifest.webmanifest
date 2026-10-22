@@ -1,0 +1,20 @@
+{
+  "name": "GPS y Rutas EPN",
+  "short_name": "GPS-Rutas",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3c72",
+  "icons": [
+    {
+      "src": "assets/icon-gps.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-gps.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
