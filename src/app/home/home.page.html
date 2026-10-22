@@ -1,20 +1,322 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>GPS & Rutas con Google Maps</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding app-container">
+  <!-- Banner de bienvenida / Info EPN -->
+  <div class="welcome-banner">
+    <div class="banner-icon">
+      <ion-icon name="map-outline"></ion-icon>
+    </div>
+    <div class="banner-text">
+      <h2>Geolocalización & Rutas</h2>
+      <p>Aplicación móvil con integración a Google Maps y exportación TXT</p>
+    </div>
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- REQUERIMIENTO 1: Hipervínculo a la posición GPS del sitio                -->
+  <!-- REQUERIMIENTO 3: Botón que guarda la ubicación en un archivo txt          -->
+  <!-- ========================================================================= -->
+  <ion-card class="feature-card">
+    <ion-card-header>
+      <div class="card-header-flex">
+        <ion-badge color="primary">Requisitos 1 y 3</ion-badge>
+        <span class="status-indicator" [class.active]="watchId !== null">
+          <ion-icon [name]="watchId !== null ? 'radio-outline' : 'pin-outline'"></ion-icon>
+          {{ watchId !== null ? 'GPS en vivo activo' : 'GPS estático' }}
+        </span>
+      </div>
+      <ion-card-title>1. Mi Posición GPS</ion-card-title>
+      <ion-card-subtitle>Obtención de coordenadas y generación de enlace</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Coordenadas -->
+      <div class="coords-box">
+        <div class="coord-item">
+          <span class="coord-label">Latitud</span>
+          <span class="coord-value">{{ latitude() !== null ? latitude() : '-0.2025464 (Ejemplo)' }}</span>
+        </div>
+        <div class="coord-divider"></div>
+        <div class="coord-item">
+          <span class="coord-label">Longitud</span>
+          <span class="coord-value">{{ longitude() !== null ? longitude() : '-78.4941719 (Ejemplo)' }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMsg()" class="error-banner">
+        <p>{{ errorMsg() }}</p>
+      </div>
+
+      <!-- Botones de Control GPS -->
+      <div class="action-grid">
+        <ion-button expand="block" (click)="obtenerUbicacionActual()" [disabled]="isLoading()">
+          <ion-icon slot="start" name="locate-outline"></ion-icon>
+          Obtener Ubicación
+        </ion-button>
+
+        <ion-button
+          *ngIf="watchId === null"
+          expand="block"
+          color="tertiary"
+          fill="outline"
+          (click)="iniciarSeguimiento()"
+        >
+          <ion-icon slot="start" name="radio-outline"></ion-icon>
+          Rastrear en Vivo
+        </ion-button>
+
+        <ion-button
+          *ngIf="watchId !== null"
+          expand="block"
+          color="warning"
+          fill="outline"
+          (click)="detenerSeguimiento()"
+        >
+          <ion-icon slot="start" name="stop-circle-outline"></ion-icon>
+          Detener Rastreo
+        </ion-button>
+      </div>
+
+      <!-- 1.- Hipervínculo a la posición GPS de su sitio -->
+      <div class="link-section">
+        <div class="section-title">
+          <ion-icon name="open-outline"></ion-icon>
+          <span>Hipervínculo a Google Maps:</span>
+        </div>
+        <div class="link-card">
+          <a
+            [href]="ubicacionGpsUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="active-hyperlink"
+            id="link-ubicacion-gps"
+          >
+            {{ ubicacionGpsUrl() }}
+          </a>
+        </div>
+        <div class="link-buttons">
+          <ion-button
+            fill="solid"
+            size="small"
+            color="primary"
+            [href]="ubicacionGpsUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ion-icon slot="start" name="open-outline"></ion-icon>
+            Abrir en Maps
+          </ion-button>
+
+          <ion-button
+            fill="outline"
+            size="small"
+            color="medium"
+            (click)="copiarAlPortapapeles(ubicacionGpsUrl(), 'Enlace de ubicación copiado al portapapeles')"
+          >
+            <ion-icon slot="start" name="copy-outline"></ion-icon>
+            Copiar Link
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- 3.- Botón que guarda su ubicación en un archivo txt -->
+      <div class="export-box">
+        <div class="export-description">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div>
+            <strong>Descargar reporte de ubicación</strong>
+            <p>Exporta coordenadas y el enlace de Maps en formato .txt</p>
+          </div>
+        </div>
+        <ion-button
+          expand="block"
+          color="success"
+          id="btn-guardar-ubicacion-txt"
+          (click)="guardarUbicacionTxt()"
+        >
+          <ion-icon slot="start" name="download-outline"></ion-icon>
+          3. Guardar Ubicación en TXT
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- ========================================================================= -->
+  <!-- REQUERIMIENTO 2: Hipervínculo que muestra ruta a casa, parque o sitio      -->
+  <!-- REQUERIMIENTO 4: Botón que guarda la ruta en un archivo txt               -->
+  <!-- ========================================================================= -->
+  <ion-card class="feature-card">
+    <ion-card-header>
+      <div class="card-header-flex">
+        <ion-badge color="secondary">Requisitos 2 y 4</ion-badge>
+        <span class="route-badge">Google Maps Directions</span>
+      </div>
+      <ion-card-title>2. Ruta con Puntos Intermedios</ion-card-title>
+      <ion-card-subtitle>Origen, destino y waypoints hacia sitios de interés</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Selección de Destino -->
+      <ion-item class="custom-select-item">
+        <ion-label position="stacked">Seleccione Sitio de Interés / Destino:</ion-label>
+        <ion-select
+          [value]="destinoSeleccionado()"
+          (ionChange)="cambiarDestinoPreset($event.detail.value)"
+          interface="popover"
+          placeholder="Seleccionar destino"
+        >
+          <ion-select-option
+            *ngFor="let d of destinosPredefinidos"
+            [value]="d.id"
+          >
+            {{ d.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Toggle origen GPS o manual -->
+      <div class="origin-toggle-container">
+        <label class="toggle-label">
+          <input
+            type="checkbox"
+            [checked]="usarGpsComoOrigen()"
+            (change)="usarGpsComoOrigen.set(!usarGpsComoOrigen())"
+          />
+          <span>Usar mi ubicación GPS actual como origen de la ruta</span>
+        </label>
+      </div>
+
+      <!-- Resumen visual de la ruta -->
+      <div class="route-steps">
+        <!-- Punto A: Origen -->
+        <div class="route-step">
+          <div class="step-icon origin">
+            <ion-icon name="pin-outline"></ion-icon>
+          </div>
+          <div class="step-content">
+            <span class="step-title">Origen</span>
+            <span class="step-value">{{ origenRuta() }}</span>
+            <small class="step-hint" *ngIf="usarGpsComoOrigen() && latitude() !== null">
+              (Detectado automáticamente por GPS)
+            </small>
+          </div>
+        </div>
+
+        <!-- Waypoints (Puntos de paso) -->
+        <div class="route-step" *ngIf="waypointsRuta()">
+          <div class="step-icon waypoint">
+            <ion-icon name="navigate-outline"></ion-icon>
+          </div>
+          <div class="step-content">
+            <span class="step-title">Puntos de Paso (Waypoints)</span>
+            <span class="step-value code-snippet">{{ waypointsRuta() }}</span>
+          </div>
+        </div>
+
+        <!-- Punto B: Destino -->
+        <div class="route-step">
+          <div class="step-icon destination">
+            <ion-icon name="flag-outline"></ion-icon>
+          </div>
+          <div class="step-content">
+            <span class="step-title">Destino</span>
+            <span class="step-value">{{ destinoRuta() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Si seleccionó personalizado, permitir ingresar datos -->
+      <div *ngIf="destinoSeleccionado() === 'custom'" class="custom-inputs">
+        <ion-item lines="none" class="input-card">
+          <ion-label position="stacked">Coordenadas de Origen (lat,lng):</ion-label>
+          <ion-input
+            [(ngModel)]="origenManual"
+            placeholder="-0.180653,-78.467838"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="input-card">
+          <ion-label position="stacked">Coordenadas de Destino (lat,lng):</ion-label>
+          <ion-input
+            [(ngModel)]="destinoManual"
+            placeholder="-0.229415,-78.524581"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item lines="none" class="input-card">
+          <ion-label position="stacked">Waypoints (separados por |):</ion-label>
+          <ion-input
+            [(ngModel)]="waypointsManual"
+            placeholder="-0.201452,-78.498124|-0.220164,-78.512328"
+          ></ion-input>
+        </ion-item>
+      </div>
+
+      <!-- 2.- Hipervínculo que muestra su ruta a casa, parque o sitio de interés -->
+      <div class="link-section">
+        <div class="section-title">
+          <ion-icon name="map-outline"></ion-icon>
+          <span>Hipervínculo de Ruta a Google Maps:</span>
+        </div>
+        <div class="link-card">
+          <a
+            [href]="rutaGpsUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="active-hyperlink"
+            id="link-ruta-gps"
+          >
+            {{ rutaGpsUrl() }}
+          </a>
+        </div>
+        <div class="link-buttons">
+          <ion-button
+            fill="solid"
+            size="small"
+            color="secondary"
+            [href]="rutaGpsUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ion-icon slot="start" name="navigate-outline"></ion-icon>
+            Abrir Ruta en Maps
+          </ion-button>
+
+          <ion-button
+            fill="outline"
+            size="small"
+            color="medium"
+            (click)="copiarAlPortapapeles(rutaGpsUrl(), 'Enlace de ruta copiado al portapapeles')"
+          >
+            <ion-icon slot="start" name="copy-outline"></ion-icon>
+            Copiar Link
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- 4.- Botón que guarda su ruta en un archivo txt -->
+      <div class="export-box">
+        <div class="export-description">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <div>
+            <strong>Descargar reporte de ruta</strong>
+            <p>Exporta origen, destino, waypoints y URL en formato .txt</p>
+          </div>
+        </div>
+        <ion-button
+          expand="block"
+          color="success"
+          id="btn-guardar-ruta-txt"
+          (click)="guardarRutaTxt()"
+        >
+          <ion-icon slot="start" name="download-outline"></ion-icon>
+          4. Guardar Ruta en TXT
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

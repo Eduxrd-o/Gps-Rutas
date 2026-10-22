@@ -1,27 +1,418 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.app-container {
+  --background: #f4f6fb;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+/* Banner de cabecera */
+.welcome-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: #ffffff;
+  padding: 18px 20px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 15px rgba(30, 60, 114, 0.2);
+
+  .banner-icon {
+    font-size: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .banner-text {
+    h2 {
+      margin: 0 0 4px 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.9;
+      line-height: 1.3;
+    }
+  }
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+/* Tarjetas de requerimientos */
+.feature-card {
+  margin: 0 0 20px 0;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
 
-  color: #8c8c8c;
+  ion-card-header {
+    padding-bottom: 10px;
 
-  margin: 0;
+    .card-header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      ion-badge {
+        font-size: 0.75rem;
+        padding: 5px 10px;
+        border-radius: 20px;
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #718096;
+
+        &.active {
+          color: #3880ff;
+          animation: pulse 1.8s infinite;
+        }
+      }
+
+      .route-badge {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #5260ff;
+        background: rgba(82, 96, 255, 0.08);
+        padding: 4px 8px;
+        border-radius: 6px;
+      }
+    }
+
+    ion-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    ion-card-subtitle {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+  }
 }
 
-#container a {
-  text-decoration: none;
+/* Caja de coordenadas */
+.coords-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+
+  .coord-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+
+    .coord-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+
+    .coord-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+  }
+
+  .coord-divider {
+    width: 1px;
+    height: 32px;
+    background: #cbd5e1;
+    margin: 0 10px;
+  }
+}
+
+/* Mensajes de error */
+.error-banner {
+  background: #fef2f2;
+  border-left: 4px solid #ef4444;
+  color: #991b1b;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+
+  p {
+    margin: 0;
+  }
+}
+
+/* Grilla de acciones de botones */
+.action-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  ion-button {
+    --border-radius: 10px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+/* Sección de enlaces e hipervínculos */
+.link-section {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .link-card {
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    word-break: break-all;
+
+    .active-hyperlink {
+      color: #2563eb;
+      font-size: 0.82rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      text-decoration: underline;
+      display: inline-block;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #1d4ed8;
+      }
+    }
+  }
+
+  .link-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    ion-button {
+      --border-radius: 8px;
+      margin: 0;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Sección de exportación a archivo .txt */
+.export-box {
+  background: #f0fdf4;
+  border: 1px dashed #86efac;
+  border-radius: 14px;
+  padding: 14px;
+
+  .export-description {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #166534;
+
+    ion-icon {
+      font-size: 26px;
+      margin-top: 2px;
+      color: #15803d;
+      flex-shrink: 0;
+    }
+
+    strong {
+      display: block;
+      font-size: 0.88rem;
+      margin-bottom: 2px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.78rem;
+      color: #15803d;
+      line-height: 1.25;
+    }
+  }
+
+  ion-button {
+    --border-radius: 10px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+/* Configuración de selección de destino */
+.custom-select-item {
+  --background: #f8fafc;
+  --border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+
+  ion-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+  }
+}
+
+/* Toggle para usar GPS */
+.origin-toggle-container {
+  margin-bottom: 14px;
+  padding: 8px 4px;
+
+  .toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #334155;
+    font-weight: 500;
+
+    input[type='checkbox'] {
+      width: 18px;
+      height: 18px;
+      accent-color: #3880ff;
+      cursor: pointer;
+    }
+  }
+}
+
+/* Pasos de ruta (Origen -> Waypoint -> Destino) */
+.route-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  .route-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid #f1f5f9;
+
+    .step-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+
+      &.origin {
+        background: #e0f2fe;
+        color: #0284c7;
+      }
+      &.waypoint {
+        background: #fef3c7;
+        color: #d97706;
+      }
+      &.destination {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+    }
+
+    .step-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      .step-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748b;
+        letter-spacing: 0.3px;
+      }
+
+      .step-value {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: #1e293b;
+        word-break: break-all;
+      }
+
+      .code-snippet {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.78rem;
+        color: #b45309;
+      }
+
+      .step-hint {
+        font-size: 0.72rem;
+        color: #0284c7;
+        margin-top: 2px;
+      }
+    }
+  }
+}
+
+/* Inputs personalizados */
+.custom-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+
+  .input-card {
+    --background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    ion-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    ion-input {
+      font-size: 0.85rem;
+      font-family: ui-monospace, monospace;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
 }
